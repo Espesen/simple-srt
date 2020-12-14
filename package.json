@@ -2,6 +2,10 @@
   "name": "simple-srt",
   "version": "0.1.0-beta",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Espesen/simple-srt"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "watch": {
@@ -22,7 +26,8 @@
   },
   "scripts": {
     "test": "jasmine-ts \"spec/**/*.spec.ts\"'",
-    "lint": "eslint src/**/*.ts spec/**/*.ts --fix",
+    "ts-lint": "tsc --noemit",
+    "lint": "npm run ts-lint && eslint src/**/*.ts spec/**/*.ts --fix",
     "watch": "npm-watch",
     "prepublishOnly": "eslint src/**/*.ts --fix tsc"
   },
