@@ -71,6 +71,31 @@ describe('input.ts', () => {
       });
     });
 
+    it('should accept time ranges written in different ways', () => {
+      
+      type TestCase = {
+        timeString: string;
+        startTime: number;
+        endTime: number
+      }
+
+      const testCases: TestCase[] = [
+        { timeString: '01.02 -> 02.03', startTime: 62000, endTime: 123000 },
+        { timeString: '05:03 --> 07:03', startTime: 5 * 60000 + 3000, endTime: 7 * 60000 + 3000 },
+        { timeString: '03.04-3.07', startTime: 3 * 60000 + 4000, endTime: 3 * 60000 + 7000 }
+      ];
+
+      testCases.forEach(testCase => {
+        const snippet = testCase.timeString + '\nfoo';
+        const result = parseSimpleSrt(snippet);
+        expect(result.errors.length).toBe(0, testCase.timeString + ' should have no problems');
+        if (result.result.length) {
+          expect(result.result[0].startTime).toBe(testCase.startTime, testCase.timeString + ' start time');
+          expect(result.result[0].endTime).toBe(testCase.endTime, testCase.timeString + ' end time');
+        }
+      });
+    });
+
     describe('errors', () => {
 
       it('should show invalid time error', () => {

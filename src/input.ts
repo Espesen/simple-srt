@@ -56,7 +56,7 @@ const convertTime: (timeString: string | undefined) => number = timeString => {
 
 type StartAndEndTimes = { startTime: number, endTime: number }
 const parseTimeString: (timeString: string) => StartAndEndTimes = str => {
-  const parts = str.split(/\s?-+>\s?/).map(part => part.trim());
+  const parts = str.split(/\s?-+>?\s?/).map(part => part.trim());
   return {
     startTime: convertTime(parts[0]),
     endTime: convertTime(parts[1])
