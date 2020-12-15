@@ -29,7 +29,7 @@
     "ts-lint": "tsc --noemit",
     "lint": "npm run ts-lint && eslint src/**/*.ts spec/**/*.ts --fix",
     "watch": "npm-watch",
-    "prepublishOnly": "eslint src/**/*.ts --fix tsc"
+    "prepublishOnly": "npm run lint && npm run test && tsc"
   },
   "keywords": [],
   "author": "",

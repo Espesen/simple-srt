@@ -92,7 +92,7 @@ export const parseSimpleSrt: (
       Object.assign(item, { 
         endTime: index < array.length - 1 ?
           array[index + 1].startTime - intervalBeforeNextCaption :
-          item.endTime + DEFAULT_LAST_CAPTION_DURATION
+          item.startTime + DEFAULT_LAST_CAPTION_DURATION
       }));
 
   result.forEach((item, index) => {
