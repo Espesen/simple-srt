@@ -7,16 +7,16 @@ export type ConversionResult = {
   output: string;
   errors: ReturnType<typeof parseSimpleSrt>['errors']
 };
-type FromString = (str: string, opts?: ConversionOptions) => Promise<ConversionResult>;
+type FromString = (str: string, opts?: ConversionOptions) => ConversionResult;
 
 /**
  * Convert simplified subtitles to a valid .str format
  */
 export const fromString: FromString = (str, options = {}) => {
   const parseResult = parseSimpleSrt(str, options);
-  return Promise.resolve({
+  return {
     success: parseResult.errors.length === 0,
     output: createSrtFile(parseResult.result),
     errors: parseResult.errors
-  });
+  };
 };
