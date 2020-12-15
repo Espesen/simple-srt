@@ -4,7 +4,9 @@ export const DEFAULT_INTERVAL_BEFORE_NEXT_CAPTION = 750;
 const DEFAULT_LAST_CAPTION_DURATION = 5000;
 
 export enum errorMessages {
-  INVALID_TIME
+  INVALID_TIME = 'INVALID_TIME',
+  TIME_RANGE = 'TIME_RANGE',
+  OVERLAPPING_TIMES = 'OVERLAPPING_TIMES'
 }
 
 type ParseError = {
@@ -95,13 +97,19 @@ export const parseSimpleSrt: (
           item.startTime + DEFAULT_LAST_CAPTION_DURATION
       }));
 
-  result.forEach((item, index) => {
+  result.forEach((item, index, array) => {
+    const pushError: (type: errorMessages) => void = errorType => errors.push({
+      atIndex: index,
+      originalString: item.originalString,
+      errorType
+    });
+
     if (!item.startTime) {
-      errors.push({
-        atIndex: index,
-        originalString: item.originalString,
-        errorType: errorMessages.INVALID_TIME
-      });
+      pushError(errorMessages.INVALID_TIME);
+    } else if (item.endTime && item.endTime <= item.startTime) {
+      pushError(errorMessages.TIME_RANGE);
+    } else if (index > 0 && item.startTime < array[index - 1].endTime) {
+      pushError(errorMessages.OVERLAPPING_TIMES);
     }
   });
 

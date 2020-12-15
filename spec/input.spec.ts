@@ -79,9 +79,27 @@ describe('input.ts', () => {
         expect(result.result.length).toBe(0, 'by default, should return no results if there are errors');
         expect(result.errors.length).toBe(1, 'should return error');
         expect(result.errors[0] && result.errors[0].atIndex).toBe(0);
-        expect(result.errors[0] && result.errors[0].errorType).toBe(errorMessages.INVALID_TIME);
+        expect(result.errors[0] && result.errors[0].errorType)
+          .toBe(errorMessages.INVALID_TIME);
         expect(result.errors[0] && result.errors[0].originalString).toBe(simpleSrt);
       });
+
+      it('should show time range error', () => {
+        const simpleSrt = '5.05 --> 5.04\nFoo';
+        const result = parseSimpleSrt(simpleSrt);
+        expect(result.errors[0] && result.errors[0].errorType)
+          .toBe(errorMessages.TIME_RANGE);
+      });
+
+      it('should show overlapping times error', () => {
+        const simpleSrt = '0:01 --> 0:05\nfoo\n\n0:04 --> 0.09\bar';
+        const result = parseSimpleSrt(simpleSrt);
+        expect(result.errors[0] && result.errors[0].atIndex).toBe(1);
+        expect(result.errors[0] && result.errors[0].errorType)
+          .toBe(errorMessages.OVERLAPPING_TIMES);
+      });
+
+      
     });
 
     describe('options', () => {

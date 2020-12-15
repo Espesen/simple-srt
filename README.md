@@ -20,3 +20,10 @@ Compared to normal .srt:
 * milliseconds can be omitted
 
 NB: Empty line between captions is required!
+
+### usage
+
+```
+import * as simpleSrt from 'simple-srt';
+const result = simpleSrt.fromString(' // simplified format // ')
+```
