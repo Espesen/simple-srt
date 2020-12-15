@@ -99,6 +99,15 @@ describe('input.ts', () => {
           .toBe(errorMessages.OVERLAPPING_TIMES);
       });
 
+      it('should show overlapping times error even if no endtime provided in the previous entry', () => {
+        const simpleSrt = '0:05\nfoo\n\n0:04\nbar';
+
+        const result = parseSimpleSrt(simpleSrt);        
+        expect(result.errors[0] && result.errors[0].atIndex).toBe(1);
+        expect(result.errors[0] && result.errors[0].errorType)
+          .toBe(errorMessages.OVERLAPPING_TIMES);
+      });
+
       
     });
 

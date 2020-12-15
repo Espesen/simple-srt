@@ -79,6 +79,12 @@ export const parseSimpleSrt: (
   interface DataItemWithOriginalString extends SrtDataItem {
     originalString: string
   }
+
+  const calculateCaptionLength: (item: StartAndEndTimes, nextItem: StartAndEndTimes) => number = (curr, next) => {
+    const delta = next.startTime - curr.startTime;
+    const resultCandidate = delta > intervalBeforeNextCaption ? delta - intervalBeforeNextCaption : delta - 1;
+    return resultCandidate > 0 ? resultCandidate : 1;
+  };
   
   const result: DataItemWithOriginalString[] = splitItems(simpleSrt)
     .map((item, index) => Object.assign(
@@ -93,7 +99,7 @@ export const parseSimpleSrt: (
       item :
       Object.assign(item, { 
         endTime: index < array.length - 1 ?
-          array[index + 1].startTime - intervalBeforeNextCaption :
+          item.startTime + calculateCaptionLength(item, array[index + 1]) :
           item.startTime + DEFAULT_LAST_CAPTION_DURATION
       }));
 
